@@ -9,7 +9,6 @@ const phyicsexam=require('./phyicsexam')
 const chemestryexam=require('./chemistryexam')
 //const js_alert=require('js-alert')
 const app=express();
-const htmlsantizer=require("sanitize-html")
 const {AsyncLocalStorage}= require('async_hooks');
 
 
@@ -23,15 +22,14 @@ const { SocketAddress } = require("net");
 const cokkieparser=require('cookie-parser');
 const resultdatas = require("./results");
 const { log } = require("console");
-const mongosantization=require("express-mongo-sanitize")
-const xss=require("xss-clean")
+
+
 app.use(cokkieparser())
 app.use(express.json())
 app.use(express.urlencoded({extended:false}));
 app.set('view engine','ejs');
 app.use('/user',express.static("public"));
-app.use(mongosantization())
-app.use(xss())
+
 app.use(express.static("public"));
 
   //  app.use('/user',ensureLogin.ensureLoggedIn({redirectTo:'/'}))
@@ -68,13 +66,10 @@ var define={ usercoded:false,
   if(req.cookies.usercoded || req.cookies.passcoded) {
    define.usercoded=req.cookies.usercoded
    define.passcoded=req.cookies.passcoded
-//    console.log(define)
+   console.log(define)
   }
   if(!req.cookies.passcoded){
     define.passcoded=false;
-  }
-  if(req.cookies.subject){
-    res.clearCookie("subject")
   }
 
     if(req.cookies.userenter){
@@ -97,12 +92,12 @@ app.post('/' ,   async (req,res)=>{
     const extistinguser=await collection.findOne({name:data.name})
     const extistingpasscode=await collection.findOne({passcode:data.passcode})
     var alluser=await collection.find();
-    // console.log(data);
+    console.log(data);
     namedata=data.name;
 
 
     // const  userdata= await collection.insertMany(data);
-//    console.log("mongodb data",alluser);
+   console.log("mongodb data",alluser);
 
 
 
@@ -138,32 +133,11 @@ res.redirect('/');
 app.get('/user/home',   async (req,res)=>{
 
 if(req.cookies.userenter){
-    const alluser= await studentmarks.find();
-    // console.log(alluser)
+    const alluser= await studentmarks.find({name:namedata});
+    console.log(alluser)
     namedata2=namedata
-    var subject;
-    var subjectlist=["phyics","chemistry","maths"]
-    if(!req.cookies.subject)
-    for(let i=0; i<subjectlist.length ; i++){
-        const Teachers=await collection.findOne({name:namedata,subject:subjectlist[i]})
-      
-            if(Teachers){
-                subject=subjectlist[i]
-                res.cookie("subject",subject,{maxAge:4 * 60 * 60 * 1000})
-            }
 
-        
-    }
-    
-    else{
-subject=req.cookies.subject
-    }
-// console.log(subject)
-var teach={
-    "subject":subject
-}
-//console.log(Teachers)
-    res.render("home",{mark:alluser,head:teach});
+    res.render("home",{mark:alluser});
 }
      else{
         res.redirect('/')
@@ -173,156 +147,202 @@ var teach={
 
 app.get('/user/phyics' ,  async(req,res)=>{
     if(req.cookies.userenter){
-    
-       
+     const userget=  await useradd.findOne({name:namedata});
+        if(!userget){
 
             const phyicsexamdata=await phyicsexam.find()
-            // console.log(phyicsexamdata);
+            console.log(phyicsexamdata);
 
-           const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
-      
-   
-        res.render('phyicsexam',{lock:question})
+            var storeddata=phyicsscorepoint
+           if(req.cookies.phyicsmark){
+            var encode= Buffer.from(req.cookies.phyicsmark.score,"base64url").toString('ascii')
+            console.log(encode)
+             storeddata= {
+                score:encode,
+                istrue:req.cookies.phyicsmark.istrue
+             } 
+
+           }
+           if(req.cookies.mathsmark){
+            if(req.cookies.phyicsmark){
+                if(req.cookies.chemistrymark){
+                  //  console.log("active block")
+                      await useradd.insertMany({name:namedata});
+                     var date=new Date()
+                     var dated=date.getMonth()+1
+                     var dated=date.getDate()+"/"+dated+"/"+date.getFullYear()
+                     const mathdecode= Buffer.from(req.cookies.mathsmark.score,"base64url").toString('ascii')
+                     const chemistrydecode= Buffer.from(req.cookies.chemistrymark.score,"base64url").toString('ascii')
+                     const phyicsdecode= Buffer.from(req.cookies.phyicsmark.score,"base64url").toString('ascii')
+                     var result_data={
+                        name:namedata,
+                        date:dated.toString(),
+                        phyicsmark:phyicsdecode,
+                        mathsmark:mathdecode,
+                        chemistrymark:chemistrydecode
+                     }
+                     res.clearCookie("mathsmark")
+                     const student=await studentmarks.insertMany(result_data)
+
+                     res.clearCookie('phyicsmark')
+                     res.clearCookie("chemistrymark")
+                //"mathsmark","phyicsmark","chemistrymark"
+                }
+        }
+        }
+        res.render('phyicsexam',{ques:phyicsexamdata,score:storeddata})
     }
-        
-          
+        else{
+            res.render("completed")
         
             // alert(" you have finsihed your exam")
             // window.alert("you have finsihed your exam")
             // toast("you have finsihed your exam")
-        
+        }
         // console.log(storage.getStore())
       //  scorepoint.istrue=false;
-    
+    }
    else{
     res.redirect('/')
    }
 })
 app.post('/user/phyics', async(req,res)=>{
 
-  htmlsantizer()
-    var datalist= [{
-        question:req.body.question1,
-        choice1:req.body.question1_choice1,
-        choice2:req.body.question1_choice2,
-        choice3:req.body.question1_choice3,
-        choice4:req.body.question1_choice4,
-        ans:req.body.ans1,
-        },
-    {
-        question:req.body.question2,
-        choice1:req.body.question2_choice1,
-        choice2:req.body.question2_choice2,
-        choice3:req.body.question2_choice3,
-        choice4:req.body.question2_choice4,
-        ans:req.body.ans2,
-        
+    const data={
+        question1:req.body.question1,
+        question2:req.body.question2,
+        question3:req.body.question3,
+        question4:req.body.question4,
+        question5:req.body.question5,
+        question6:req.body.question6,
+        question7:req.body.question7,
+        question8:req.body.question8,
+        question9:req.body.question9,
+        question10:req.body.question10,
+    }
+    var datalist=[data.question1,data.question2,data.question3,data.question4,data.question5,data.question6,data.question7,data.question8,data.question9,data.question10]
+  var marks=0
+  var notwrittenmarks=0;
+  var minusmark=0;
+    console.log(data.question1)
+    console.log(data.question2)
+    console.log(data.question3)
+    for(let i=0 ; i<datalist.length;i++){
+        const phyicsexamdata=await phyicsexam.findOne({ans:datalist[i]})
+        if(phyicsexamdata){
+            marks++;
+        }
+        else{
+            minusmark++
+            console.log("minusmark",minusmark)
+                    }
+                    if(!datalist[i]){
 
-    },
-    {
-        question:req.body.question3,
-        choice1:req.body.question3_choice1,
-        choice2:req.body.question3_choice2,
-        choice3:req.body.question3_choice3,
-        choice4:req.body.question3_choice4,
-        ans:req.body.ans3,
-    } ,
-    {
-        question:req.body.question4,
-        choice1:req.body.question4_choice1,
-        choice2:req.body.question4_choice2,
-        choice3:req.body.question4_choice3,
-        choice4:req.body.question4_choice4,
-        ans:req.body.ans4,
-    },
-
-    {
-        question:req.body.question5,
-        choice1:req.body.question5_choice1,
-        choice2:req.body.question5_choice2,
-        choice3:req.body.question5_choice3,
-        choice4:req.body.question5_choice4,
-        ans:req.body.ans5,
-    },{
-        question:req.body.question6,
-        choice1:req.body.question6_choice1,
-        choice2:req.body.question6_choice2,
-        choice3:req.body.question6_choice3,
-        choice4:req.body.question6_choice4,
-        ans:req.body.ans6,
-    },
-    {
-        question:req.body.question7,
-        choice1:req.body.question7_choice1,
-        choice2:req.body.question7_choice2,
-        choice3:req.body.question7_choice3,
-        choice4:req.body.question7_choice4,
-        ans:req.body.ans7,
-    },
-    {
-        question:req.body.question8,
-        choice1:req.body.question8_choice1,
-        choice2:req.body.question8_choice2,
-        choice3:req.body.question8_choice3,
-        choice4:req.body.question8_choice4,
-        ans:req.body.ans8,
-    },
-    {
-        question:req.body.question9,
-        choice1:req.body.question9_choice1,
-        choice2:req.body.question9_choice2,
-        choice3:req.body.question9_choice3,
-        choice4:req.body.question9_choice4,
-        ans:req.body.ans9,
-    },{
-
-        question:req.body.question10,
-        choice1:req.body.question10_choice1,
-        choice2:req.body.question10_choice2,
-        choice3:req.body.question10_choice3,
-        choice4:req.body.question10_choice4,
-        ans:req.body.ans10,
-    }   ]
-    // console.log(datalist)
-  await  phyicsexam.deleteMany()
-    await   phyicsexam.insertMany(datalist)
-await resultdatas.deleteMany()
-          
-        
-    
-
+                        notwrittenmarks++
+                     }
+    }
+    namedata3=namedata2;
+    namedata=namedata3;
 
    // phyicsscorepoint.istrue=true;
 
   // console.log("minus mark"+ minusmark)
 
 
-  
+    var score=(marks*4)-minusmark;
+ score=score+notwrittenmarks;
+score= JSON.stringify(score)
+score= Buffer.from(score).toString('base64url')
+
+    
+    var phyicsmark={
+        "score":score,
+        "istrue":true
+    }
+
+    res.cookie('phyicsmark',phyicsmark)
+    // Localstore.setItem("chemistrymark",JSON.stringify(chemistryscorepoint))
+    // console.log("localstore",JSON.parse(Localstore.getItem("chemistrymark")) )
+
+    console.log(marks)
 
 //    storage.enterWith(phyicsscorepoint)
-
-res.render("uploadedsucessfuly")
+if(req.cookies.mathsmark){
+    if(req.cookies.phyicsmark){
+        if(req.cookies.chemistrymark){
+             const  registerdata= await resultdata.insertMany(namedata);
+             var dateon=new Date()
+             var dated=dateon.getMonth()+1
+           var date=dateon.getDate()+"/"+dated+"/"+dateon.getFullYear() 
+             var result_data={
+                name:namedata,
+                date:date,
+                phyicsmark:req.cookies.phyicsmark,
+                mathsmark:req.cookies.mathsmark,
+                chemistrymark:req.cookies.chemistrymark
+             }
+             const student=await studentmarks.insertmany(result_data)
+        }
+    }
+}
+    res.redirect('/user/phyics')
 
     //res.send("the response have sent"+marks)
 })
 app.get('/user/chemistry', async(req,res)=>{
     if(req.cookies.userenter){
-    
-       
+        const userget=  await useradd.findOne({name:namedata});
+        if(!userget){
+            const chemestryexamdata= await chemestryexam.find()
+            console.log(chemestryexamdata);
 
-        const chemestrytest= await chemestryexam.find()
-        // console.log(chemestrytest);
+            var storeddata=chemistryscorepoint
+        if(req.cookies.chemistrymark){
+            
 
-       const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
-  
+            var encode= Buffer.from(req.cookies.chemistrymark.score,"base64url").toString('ascii')
+            console.log(encode)
+             storeddata= {
+                score:encode,
+                istrue:req.cookies.chemistrymark.istrue
+             } 
+        }
+        if(req.cookies.mathsmark){
+            if(req.cookies.phyicsmark){
+                if(req.cookies.chemistrymark){
+                   
+                      await useradd.insertMany({name:namedata});
+                     var date=new Date()
+                    var dated=date.getMonth()+1
+                     var dated=date.getDate()+"/"+dated+"/"+date.getFullYear()
+                     const mathdecode= Buffer.from(req.cookies.mathsmark.score,"base64url").toString('ascii')
+                     const chemistrydecode= Buffer.from(req.cookies.chemistrymark.score,"base64url").toString('ascii')
+                     const phyicsdecode= Buffer.from(req.cookies.phyicsmark.score,"base64url").toString('ascii')
+                     var result_data={
+                        name:namedata,
+                        date:dated.toString(),
+                        phyicsmark:phyicsdecode,
+                        mathsmark:mathdecode,
+                        chemistrymark:chemistrydecode
+                     }
+                     res.clearCookie("mathsmark")
+                     const student=await studentmarks.insertMany(result_data)
 
-    res.render('chemistryexam',{lock:question})
-}
-           
+                     res.clearCookie('phyicsmark')
+                     res.clearCookie("chemistrymark")
+                //"mathsmark","phyicsmark","chemistrymark"
+                }
+            }
+        }
+            res.render('chemistryexam',{question:chemestryexamdata,score:storeddata})
 
-        
-  
-    
+        }
+    else{
+        // res.send("<h1> user already return the exam </h1> ")
+        res.render("completed")
+
+    }
+    }
     else{
         res.redirect('/')
     }
@@ -330,205 +350,193 @@ app.get('/user/chemistry', async(req,res)=>{
 })
 app.post('/user/chemistry', async (req,res)=>{
 
-  
-    htmlsantizer()
-    var datalist= [{
-        question:req.body.question1,
-        choice1:req.body.question1_choice1,
-        choice2:req.body.question1_choice2,
-        choice3:req.body.question1_choice3,
-        choice4:req.body.question1_choice4,
-        ans:req.body.ans1,
-        },
-    {
-        question:req.body.question2,
-        choice1:req.body.question2_choice1,
-        choice2:req.body.question2_choice2,
-        choice3:req.body.question2_choice3,
-        choice4:req.body.question2_choice4,
-        ans:req.body.ans2,
-        
+    const data={
+        question1:req.body.question1,
+        question2:req.body.question2,
+        question3:req.body.question3,
+        question4:req.body.question4,
+        question5:req.body.question5,
+        question6:req.body.question6,
+        question7:req.body.question7,
+        question8:req.body.question8,
+        question9:req.body.question9,
+        question10:req.body.question10,
+    }
+    var datalist=[data.question1,data.question2,data.question3,data.question4,data.question5,data.question6,data.question7,data.question8,data.question9,data.question10]
+  var marks=0
+    console.log(data.question1)
+    console.log(data.question2)
+    console.log(data.question3)
+    var notwrittenmarks=0;
+    var minusmark=0;
+    for(let i=0 ; i<datalist.length;i++){
+        const chemestryexamdata= await chemestryexam.findOne({ans:datalist[i]})
+        if(chemestryexamdata){
+            marks++;
+          //  console.log("active")
+        }
+        else{
+minusmark++
+//console.log("minusmark",minusmark)
+        }
 
-    },
-    {
-        question:req.body.question3,
-        choice1:req.body.question3_choice1,
-        choice2:req.body.question3_choice2,
-        choice3:req.body.question3_choice3,
-        choice4:req.body.question3_choice4,
-        ans:req.body.ans3,
-    } ,
-    {
-        question:req.body.question4,
-        choice1:req.body.question4_choice1,
-        choice2:req.body.question4_choice2,
-        choice3:req.body.question4_choice3,
-        choice4:req.body.question4_choice4,
-        ans:req.body.ans4,
-    },
+        //console.log("marks is testing",marks)
 
-    {
-        question:req.body.question5,
-        choice1:req.body.question5_choice1,
-        choice2:req.body.question5_choice2,
-        choice3:req.body.question5_choice3,
-        choice4:req.body.question5_choice4,
-        ans:req.body.ans5,
-    },{
-        question:req.body.question6,
-        choice1:req.body.question6_choice1,
-        choice2:req.body.question6_choice2,
-        choice3:req.body.question6_choice3,
-        choice4:req.body.question6_choice4,
-        ans:req.body.ans6,
-    },
-    {
-        question:req.body.question7,
-        choice1:req.body.question7_choice1,
-        choice2:req.body.question7_choice2,
-        choice3:req.body.question7_choice3,
-        choice4:req.body.question7_choice4,
-        ans:req.body.ans7,
-    },
-    {
-        question:req.body.question8,
-        choice1:req.body.question8_choice1,
-        choice2:req.body.question8_choice2,
-        choice3:req.body.question8_choice3,
-        choice4:req.body.question8_choice4,
-        ans:req.body.ans8,
-    },
-    {
-        question:req.body.question9,
-        choice1:req.body.question9_choice1,
-        choice2:req.body.question9_choice2,
-        choice3:req.body.question9_choice3,
-        choice4:req.body.question9_choice4,
-        ans:req.body.ans9,
-    },{
+     if(!datalist[i]){
 
-        question:req.body.question10,
-        choice1:req.body.question10_choice1,
-        choice2:req.body.question10_choice2,
-        choice3:req.body.question10_choice3,
-        choice4:req.body.question10_choice4,
-        ans:req.body.ans10,
-    }   ]
-    // console.log(datalist)
-  await  chemestryexam.deleteMany()
-    await   chemestryexam.insertMany(datalist)
-await resultdatas.deleteMany()
+        notwrittenmarks++
+     }
 
-   res.render("uploadedsucessfuly")
+    }
+
+   console.log("notwrittenmarks",notwrittenmarks)
+    namedata3=namedata2;
+    namedata=namedata3;
+
+  //  chemistryscorepoint.istrue=true;
+
+  // console.log("minus mark"+ minusmark)
+    var score=(marks*4)-minusmark;
+    score=score+notwrittenmarks;
+    score= JSON.stringify(score)
+    score= Buffer.from(score).toString('base64url')
+    var chemistrymark={
+        "score":score,
+        "istrue":true
+    }
+    res.cookie("chemistrymark",chemistrymark)
+
+    console.log("marks",marks)
+
+//    storage.enterWith(phyicsscorepoint)
+
+    res.redirect('/user/chemistry')
 
 })
 app.get('/user/maths',async(req,res)=>{
     if(req.cookies.userenter){
-      
-        const maths=await mathsexam.find()
-        // console.log(maths);
+        const userget=  await useradd.findOne({name:namedata});
+        if(!userget){
+            const mathsexamdata= await mathsexam.find()
+            console.log(mathsexamdata);
 
-       const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
-  
-
-    res.render('mathsexam',{lock:question})
+            var storeddata=mathsscorepoint
+        if(req.cookies.mathsmark){
+            
+            var encode= Buffer.from(req.cookies.mathsmark.score,"base64url").toString('ascii')
+            console.log(encode)
+             storeddata= {
+                score:encode,
+                istrue:req.cookies.mathsmark.istrue
+             } 
         }
+        if(req.cookies.mathsmark){
+            if(req.cookies.phyicsmark){
+                if(req.cookies.chemistrymark){
+                    // console.log("active block")
+                      await useradd.insertMany({name:namedata});
+                     var date=new Date()
+                     
+                     var month=date.getMonth()+1
+                     var dated=date.getDate()+"/"+month+"/"+date.getFullYear()
+                     const mathdecode= Buffer.from(req.cookies.mathsmark.score,"base64url").toString('ascii')
+                     const chemistrydecode= Buffer.from(req.cookies.chemistrymark.score,"base64url").toString('ascii')
+                     const phyicsdecode= Buffer.from(req.cookies.phyicsmark.score,"base64url").toString('ascii')
+                     var result_data={
+                        name:namedata,
+                        date:dated.toString(),
+                        phyicsmark: phyicsdecode,
+                        mathsmark:mathdecode,
+                        chemistrymark:chemistrydecode
+                     }
+                     res.clearCookie("mathsmark")
+                     const student=await studentmarks.insertMany(result_data)
+
+                     res.clearCookie('phyicsmark')
+                     res.clearCookie("chemistrymark")
+                //"mathsmark","phyicsmark","chemistrymark"
+                }
+            }
+        }
+            res.render('mathsexam',{question:mathsexamdata,score:storeddata})
+        }
+        else{
+           // res.send("<h1> you already return exam </h1>")
+           res.render("completed")
+        }
+
+        // console.log(storage.getStore())
+      //  scorepoint.istrue=false;
+
+    }
     else{
         res.redirect('/')
     }
 })
 app.post("/user/maths", async(req,res)=>{
 
-    htmlsantizer()
-    var datalist= [{
-        question:req.body.question1,
-        choice1:req.body.question1_choice1,
-        choice2:req.body.question1_choice2,
-        choice3:req.body.question1_choice3,
-        choice4:req.body.question1_choice4,
-        ans:req.body.ans1,
-        },
-    {
-        question:req.body.question2,
-        choice1:req.body.question2_choice1,
-        choice2:req.body.question2_choice2,
-        choice3:req.body.question2_choice3,
-        choice4:req.body.question2_choice4,
-        ans:req.body.ans2,
-        
+    const data={
+        question1:req.body.question1,
+        question2:req.body.question2,
+        question3:req.body.question3,
+        question4:req.body.question4,
+        question5:req.body.question5,
+        question6:req.body.question6,
+        question7:req.body.question7,
+        question8:req.body.question8,
+        question9:req.body.question9,
+        question10:req.body.question10,
+    }
+    var datalist=[data.question1,data.question2,data.question3,data.question4,data.question5,data.question6,data.question7,data.question8,data.question9,data.question10]
+  var marks=0
+    console.log(data.question1)
+    console.log(data.question2)
+    console.log(data.question3)
+    var notwrittenmarks=0;
+    var minusmark=0;
+    for(let i=0 ; i<datalist.length;i++){
+        const mathsexamdata= await mathsexam.findOne({ans:datalist[i]})
+        if(mathsexamdata){
+            marks++;
+          //  console.log("active")
+        }
+        else{
+minusmark++
+//console.log("minusmark",minusmark)
+        }
 
-    },
-    {
-        question:req.body.question3,
-        choice1:req.body.question3_choice1,
-        choice2:req.body.question3_choice2,
-        choice3:req.body.question3_choice3,
-        choice4:req.body.question3_choice4,
-        ans:req.body.ans3,
-    } ,
-    {
-        question:req.body.question4,
-        choice1:req.body.question4_choice1,
-        choice2:req.body.question4_choice2,
-        choice3:req.body.question4_choice3,
-        choice4:req.body.question4_choice4,
-        ans:req.body.ans4,
-    },
+        //console.log("marks is testing",marks)
 
-    {
-        question:req.body.question5,
-        choice1:req.body.question5_choice1,
-        choice2:req.body.question5_choice2,
-        choice3:req.body.question5_choice3,
-        choice4:req.body.question5_choice4,
-        ans:req.body.ans5,
-    },{
-        question:req.body.question6,
-        choice1:req.body.question6_choice1,
-        choice2:req.body.question6_choice2,
-        choice3:req.body.question6_choice3,
-        choice4:req.body.question6_choice4,
-        ans:req.body.ans6,
-    },
-    {
-        question:req.body.question7,
-        choice1:req.body.question7_choice1,
-        choice2:req.body.question7_choice2,
-        choice3:req.body.question7_choice3,
-        choice4:req.body.question7_choice4,
-        ans:req.body.ans7,
-    },
-    {
-        question:req.body.question8,
-        choice1:req.body.question8_choice1,
-        choice2:req.body.question8_choice2,
-        choice3:req.body.question8_choice3,
-        choice4:req.body.question8_choice4,
-        ans:req.body.ans8,
-    },
-    {
-        question:req.body.question9,
-        choice1:req.body.question9_choice1,
-        choice2:req.body.question9_choice2,
-        choice3:req.body.question9_choice3,
-        choice4:req.body.question9_choice4,
-        ans:req.body.ans9,
-    },{
+     if(!datalist[i]){
 
-        question:req.body.question10,
-        choice1:req.body.question10_choice1,
-        choice2:req.body.question10_choice2,
-        choice3:req.body.question10_choice3,
-        choice4:req.body.question10_choice4,
-        ans:req.body.ans10,
-    }   ]
-    // console.log(datalist)
-  await  mathsexam.deleteMany()
-    await   mathsexam.insertMany(datalist)
-await resultdatas.deleteMany()
-//storage.enterWith(phyicsscorepoint)
+        notwrittenmarks++
+     }
 
-res.render("uploadedsucessfuly")
+    }
+
+   console.log("notwrittenmarks",notwrittenmarks)
+    namedata3=namedata2;
+    namedata=namedata3;
+
+   // mathsscorepoint.istrue=true;
+
+  // console.log("minus mark"+ minusmark)
+   var score=(marks*4)-minusmark;
+    var score=score+notwrittenmarks;
+    score= JSON.stringify(score)
+    score= Buffer.from(score).toString('base64url')
+    var mathsmark={
+        "score":score,
+        "istrue":true
+    }
+    res.cookie("mathsmark",mathsmark)
+
+
+    console.log("marks",marks)
+
+//    storage.enterWith(phyicsscorepoint)
+
+    res.redirect('/user/maths')
 })
 const port=3000
 app.listen(port,()=>{
