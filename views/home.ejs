@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jee exam from school</title>
+     <link rel="stylesheet" href="/user/tailwind.css"> 
+     <link rel="icon" href="/user/schoollogo.png">
+       
+</head>
+<body>
+     <section class="text-3xl p-5  bg-red-500 text-white capitalize flex border-2 "> <p class="text-4xl    p-5">subject paper</p>
+     <a href="/"  class="ml-auto"><button class="border  transition-all duration-150 rounded text-white text-2xl border border-red-500 hover:border-white bg-blue-500 p-5">logout </button> </a>
+    </section>
+   
+    <section class="flex flex-wrap justify-center ">
+     
+        <% if (head.subject=="phyics") { %>
+       
+          <a href="/user/phyics">
+          
+            <div class="p-4 transform scale-95 transition-all hover:scale-100 duration-100 cursor-pointer  ">
+                <div class="h-full border-2 w-72 shadow-2xl border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                    <img class="lg:h-48 md:h-36 w-72 object-cover object-center " src="./phyics.jpg" alt="blog">
+                    <div class="p-6">
+                        <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">SUBJECT</h2>
+                        <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The phyics paper </h1>
+                        <!-- <p class="leading-relaxed mb-3">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p> -->
+                    
+                    </div>
+                </div>
+            </div>
+          </a>
+        <% } %>
+        <% if (head.subject=="chemistry") { %>
+          <a href="/user/chemistry">
+            <div class="p-4 transform scale-95 transition-all hover:scale-100 duration-100 cursor-pointer">
+              <div class="h-full border-2 w-72 shadow-2xl border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                  <img class="lg:h-48 md:h-36 w-72 object-cover object-center " src="./chemistry.jpg" alt="blog">
+                  <div class="p-6">
+                      <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">SUBJECT</h2>
+                      <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The chemistry paper </h1>
+                      <!-- <p class="leading-relaxed mb-3">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p> -->
+                  
+                  </div>
+              </div>
+            </div>
+          </a>
+        <% } %>
+        <% if (head.subject=="maths") { %>
+          <a href="/user/maths">
+            <div class="p-4 transform scale-95 transition-all hover:scale-100 duration-100 cursor-pointer">
+              <div class="h-full border-2 w-72 shadow-2xl border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                  <img class="lg:h-48 md:h-36 w-72 object-cover object-center " src="./maths.jpg" alt="blog">
+                  <div class="p-6">
+                      <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">SUBJECT</h2>
+                      <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The maths paper </h1>
+                      <!-- <p class="leading-relaxed mb-3">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p> -->
+                  
+                  </div>
+              </div>
+            </div> 
+          </a>
+        <% } %>
+  
+     
+    
+     
+  
+          
+    </section>
+<section><p class="bg-green-500 text-3xl text-white text-center capitalize p-5">The Test result</p>
+  <div class="border focus-within:border-green-500 mt-5">
+    <div class="searchbar h-10 flex bg-white ">
+      <select name="" id="data" class="ml-3 outline-none ">
+        <option value="date">Date</option>
+    <option value="name">name</option>
+    
+      </select>
+        <input type="search" id="searchbar" class="h-10 w-full p-2 focus:outline-none" placeholder="search here the date" onkeyup="search()">
+        <svg xmlns="http://www.w3.org/2000/svg"  class="w-5 " style=" color:black;" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+       
+    </div>
+  </div>
+<section class="result section text-2xl p-5 flex flex-wrap gap-2  justify-center">
+
+
+<div  class="overflow-scroll height">
+
+  <table class="content-table text-center  ">
+   <thead>
+     <tr>
+       <th>No</th>
+       <th>Name</th>
+       <th>date</th>
+       <th>phyics mark</th>
+       <th>maths mark</th>
+       <th>chemistry mark</th>
+     </tr>
+   </thead>
+   <tbody class="overflow-scroll height">
+     <% mark.forEach((row, index) => { %>
+       <tr id="list">
+      <td><%= index+1  %></td>
+      <td id="name"><%= row.name %></td>
+      <td id="date"> <%= row.date %></td>
+      <td><%= row.phyicsmark %></td>
+      <td><%= row.mathsmark %></td>
+      <td> <%= row.chemistrymark %></td>
+     </tr>
+   <% }) %>
+     
+   </tbody>
+ </table>
+</div>
+</section>
+</section>
+  
+    
+ 
+
+    
+
+     
+</body>
+<script>
+var name="#name";
+var date="#date";
+var fixed_data=date
+var dataselector=document.getElementById("data")
+dataselector.onclick=()=>{
+
+  if(dataselector.value=="date"){
+  document.getElementById("searchbar").setAttribute("placeholder","enter the date..")
+   fixed_data=date
+}
+ else if(dataselector.value=="name"){
+  document.getElementById("searchbar").setAttribute("placeholder","enter the name..")
+ fixed_data=name
+}
+
+}
+
+  const search = () => {
+    const searchbox = document.getElementById("searchbar").value.toUpperCase();
+    const pname=document.querySelectorAll("#date") ;
+    const storeitems = document.getElementById("product-list")
+     const product = document.querySelectorAll('#list')
+     
+    for (var i = 0; i < pname.length; i++) {
+    let match = product[i].querySelectorAll(fixed_data)[0];
+    if (match) {
+    let textvalue = match.textcontent || match.innerHTML
+    if (textvalue. toUpperCase().indexOf(searchbox) > -1) {
+    product[i].style.display = ""; }
+     else {
+    product[i].style.display = "none";
+    }
+}
+}
+}
+document.getElementById('text').addEventListener('copy',e=>e.defaultPrevented())
+</script>
+<style>
+  * {
+    /* Change your font family */
+    font-family: sans-serif;
+}
+.height{
+ max-height: 600px;
+}
+.content-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 15px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+</style>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam sheet</title>
+    <link rel="stylesheet" href="./tailwind.css">
+    <link rel="stylesheet" href="../public/schoollogo.png">
+
+    
+</head>
+<body>
+
+    <section class="p-5 bg-blue-50 text-2xl">
+        <div class="text-4xl p-5">
+            <p class="font-bold">The exam upload page </p>
+        </div>
+        <% for( let i = 0; i < array.length; i++ ) { %>
+        
+        <% } %>
+        <div class="p-5 ">
+            <div class="flex">
+                <p>1.</p>
+               <textarea type="text"  class=" focus:outline-none w-1/2 bg-transparent border-b border-black placeholder placeholder:text-xl"  placeholder="enter the question here"></textarea>
+                
+            </div>
+            <div class="ml-5 mt-4">
+                <div class="mt-2">
+<label for="choice"><input type="radio"  name="quest1_ans1"  id=""></label>
+                    <input type="text" id="choice" name="quest1_choice1"  class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                </div>
+              
+                <div class="mt-2">
+                    <label for="choice"><input type="radio" required name="quest1_ans2" class="text-2xl" id=""></label>
+                                        <input type="text" id="choice"  name="quest1_choice2"  required class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="choice"><input type="radio" name="quest1_ans3" class="text-2xl" id=""></label>
+                                                            <input type="text" required  name="quest1_choice3"  id="choice" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <label for="choice"><input type="radio" name="quest1_ans4" class="text-2xl" id="" required></label>
+                                                                                <input type="text" required name="quest1_choice4"  id="choice" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                                            </div>
+            </div>
+           
+</div>
+
+    </section>
+</body>
+<style>
+    .placeholder::placeholder{
+    color: rgba(0, 0, 0, 0.329);     
+    }
+    input[type=radio]{
+ 
+
+ border-radius: 50%;
+ width: 20px;
+ height: 20px;
+padding: 10px;
+ border: 2px solid #999;
+ transition: 0.2s all linear;
+ margin-right: 5px;
+color: purple;
+ position: relative;
+ top: 4px;
+   }
+</style>
+</html>

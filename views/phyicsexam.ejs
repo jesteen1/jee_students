@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam sheet</title>
+    <link rel="stylesheet" href="./tailwind.css">
+    <link rel="stylesheet" href="../public/schoollogo.png">
+
+    
+</head>
+<body>
+
+    <section class="p-5 bg-blue-50 text-2xl">
+        <div class="text-4xl p-5">
+            <p class="font-bold">The exam upload page </p>
+        </div>
+        <form action="/user/phyics" method="post">
+
+
+            <% lock.forEach((row,index) => { %>
+             
+                <div class="p-5 ">
+                    <div class="flex">
+                        <p><%= index+1  %>.</p>
+                       <textarea type="text" required name="question<%= index+1  %>" class=" focus:outline-none w-1/2 bg-transparent border-b border-black placeholder placeholder:text-xl"  placeholder="enter the question here"></textarea>
+                        
+                    </div>
+                    <div class="ml-5 mt-4">
+                        <div class="mt-2">
+        <label for="choice"><input type="radio" required name="ans<%= index+1  %>" value="<%= index+1  %>A" id=""></label>
+                            <input type="text" id="choice" required name="question<%= index+1  %>_choice1"  class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                        </div>
+                      
+                        <div class="mt-2">
+                            <label for="choice"><input type="radio" required name="ans<%= index+1  %>" value="<%= index+1  %>B" class="text-2xl" id=""></label>
+                                                <input type="text" required id="choice" name="question<%= index+1  %>_choice2" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                            </div>
+                                            <div class="mt-2">
+                                                <label for="choice"><input type="radio" required name="ans<%= index+1  %>" class="text-2xl" value="<%= index+1  %>C" id=""></label>
+                                                                    <input type="text" required id="choice" name="question<%= index +1 %>_choice3" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                                </div>
+                                                                <div class="mt-2">
+                                                                    <label for="choice"><input type="radio" required name="ans<%= index+1  %>" value="<%= index+1  %>D" class="text-2xl" id="" required></label>
+                                                                                        <input type="text" required id="choice" name="question<%= index+1  %>_choice4"  class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                                                    </div>
+                    </div>
+                   
+        </div>
+            <% }) %>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+        </form>
+        <!-- <div class="p-5 ">
+            <div class="flex">
+                <p>1.</p>
+               <textarea type="text" name="question1" class=" focus:outline-none w-1/2 bg-transparent border-b border-black placeholder placeholder:text-xl"  placeholder="enter the question here"></textarea>
+                
+            </div>
+            <div class="ml-5 mt-4">
+                <div class="mt-2">
+<label for="choice"><input type="radio" name="ans1" value="1A" id=""></label>
+                    <input type="text" id="choice" name="question1_choice1"  class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                </div>
+              
+                <div class="mt-2">
+                    <label for="choice"><input type="radio" name="ans1" value="1B" class="text-2xl" id=""></label>
+                                        <input type="text" id="choice" name="question1_choice2" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="choice"><input type="radio" name="ans1" class="text-2xl" value="1C" id=""></label>
+                                                            <input type="text" id="choice" name="question1_choice3" class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <label for="choice"><input type="radio" name="ans1" value="1D" class="text-2xl" id=""></label>
+                                                                                <input type="text" id="choice" name="question1_choice4"  class="focus:outline-none  bg-transparent border-b border-black placeholder placeholder:text-xl" placeholder="enter the choice here">
+                                                                            </div>
+            </div>
+           
+</div> -->
+    </section>
+</body>
+<style>
+    .placeholder::placeholder{
+    color: rgba(0, 0, 0, 0.329);     
+    }
+    input[type=radio]{
+ 
+
+ border-radius: 50%;
+ width: 20px;
+ height: 20px;
+padding: 10px;
+ border: 2px solid #999;
+ transition: 0.2s all linear;
+ margin-right: 5px;
+color: purple;
+ position: relative;
+ top: 4px;
+   }
+</style>
+</html>
