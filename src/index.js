@@ -66,7 +66,7 @@ var define={ usercoded:false,
   if(req.cookies.usercoded || req.cookies.passcoded) {
    define.usercoded=req.cookies.usercoded
    define.passcoded=req.cookies.passcoded
-   console.log(define)
+//    console.log(define)
   }
   if(!req.cookies.passcoded){
     define.passcoded=false;
@@ -92,12 +92,12 @@ app.post('/' ,   async (req,res)=>{
     const extistinguser=await collection.findOne({name:data.name})
     const extistingpasscode=await collection.findOne({passcode:data.passcode})
     var alluser=await collection.find();
-    console.log(data);
+    // console.log(data);
     namedata=data.name;
 
 
     // const  userdata= await collection.insertMany(data);
-   console.log("mongodb data",alluser);
+//    console.log("mongodb data",alluser);
 
 
 
@@ -134,7 +134,7 @@ app.get('/user/home',   async (req,res)=>{
 
 if(req.cookies.userenter){
     const alluser= await studentmarks.find({name:namedata});
-    console.log(alluser)
+    // console.log(alluser)
     namedata2=namedata
 
     res.render("home",{mark:alluser});
@@ -151,12 +151,12 @@ app.get('/user/phyics' ,  async(req,res)=>{
         if(!userget){
 
             const phyicsexamdata=await phyicsexam.find()
-            console.log(phyicsexamdata);
+            // console.log(phyicsexamdata);
 
             var storeddata=phyicsscorepoint
            if(req.cookies.phyicsmark){
             var encode= Buffer.from(req.cookies.phyicsmark.score,"base64url").toString('ascii')
-            console.log(encode)
+            // console.log(encode)
              storeddata= {
                 score:encode,
                 istrue:req.cookies.phyicsmark.istrue
@@ -224,9 +224,9 @@ app.post('/user/phyics', async(req,res)=>{
   var marks=0
   var notwrittenmarks=0;
   var minusmark=0;
-    console.log(data.question1)
-    console.log(data.question2)
-    console.log(data.question3)
+    // console.log(data.question1)
+    // console.log(data.question2)
+    // console.log(data.question3)
     for(let i=0 ; i<datalist.length;i++){
         const phyicsexamdata=await phyicsexam.findOne({ans:datalist[i]})
         if(phyicsexamdata){
@@ -234,7 +234,7 @@ app.post('/user/phyics', async(req,res)=>{
         }
         else{
             minusmark++
-            console.log("minusmark",minusmark)
+            // console.log("minusmark",minusmark)
                     }
                     if(!datalist[i]){
 
@@ -264,7 +264,7 @@ score= Buffer.from(score).toString('base64url')
     // Localstore.setItem("chemistrymark",JSON.stringify(chemistryscorepoint))
     // console.log("localstore",JSON.parse(Localstore.getItem("chemistrymark")) )
 
-    console.log(marks)
+    // console.log(marks)
 
 //    storage.enterWith(phyicsscorepoint)
 if(req.cookies.mathsmark){
@@ -294,14 +294,14 @@ app.get('/user/chemistry', async(req,res)=>{
         const userget=  await useradd.findOne({name:namedata});
         if(!userget){
             const chemestryexamdata= await chemestryexam.find()
-            console.log(chemestryexamdata);
+            // console.log(chemestryexamdata);
 
             var storeddata=chemistryscorepoint
         if(req.cookies.chemistrymark){
             
 
             var encode= Buffer.from(req.cookies.chemistrymark.score,"base64url").toString('ascii')
-            console.log(encode)
+            // console.log(encode)
              storeddata= {
                 score:encode,
                 istrue:req.cookies.chemistrymark.istrue
@@ -364,9 +364,9 @@ app.post('/user/chemistry', async (req,res)=>{
     }
     var datalist=[data.question1,data.question2,data.question3,data.question4,data.question5,data.question6,data.question7,data.question8,data.question9,data.question10]
   var marks=0
-    console.log(data.question1)
-    console.log(data.question2)
-    console.log(data.question3)
+    // console.log(data.question1)
+    // console.log(data.question2)
+    // console.log(data.question3)
     var notwrittenmarks=0;
     var minusmark=0;
     for(let i=0 ; i<datalist.length;i++){
@@ -389,7 +389,7 @@ minusmark++
 
     }
 
-   console.log("notwrittenmarks",notwrittenmarks)
+//    console.log("notwrittenmarks",notwrittenmarks)
     namedata3=namedata2;
     namedata=namedata3;
 
@@ -406,7 +406,7 @@ minusmark++
     }
     res.cookie("chemistrymark",chemistrymark)
 
-    console.log("marks",marks)
+    // console.log("marks",marks)
 
 //    storage.enterWith(phyicsscorepoint)
 
@@ -418,13 +418,13 @@ app.get('/user/maths',async(req,res)=>{
         const userget=  await useradd.findOne({name:namedata});
         if(!userget){
             const mathsexamdata= await mathsexam.find()
-            console.log(mathsexamdata);
+            // console.log(mathsexamdata);
 
             var storeddata=mathsscorepoint
         if(req.cookies.mathsmark){
             
             var encode= Buffer.from(req.cookies.mathsmark.score,"base64url").toString('ascii')
-            console.log(encode)
+            // console.log(encode)
              storeddata= {
                 score:encode,
                 istrue:req.cookies.mathsmark.istrue
@@ -489,9 +489,9 @@ app.post("/user/maths", async(req,res)=>{
     }
     var datalist=[data.question1,data.question2,data.question3,data.question4,data.question5,data.question6,data.question7,data.question8,data.question9,data.question10]
   var marks=0
-    console.log(data.question1)
-    console.log(data.question2)
-    console.log(data.question3)
+    // console.log(data.question1)
+    // console.log(data.question2)
+    // console.log(data.question3)
     var notwrittenmarks=0;
     var minusmark=0;
     for(let i=0 ; i<datalist.length;i++){
@@ -514,7 +514,7 @@ minusmark++
 
     }
 
-   console.log("notwrittenmarks",notwrittenmarks)
+//    console.log("notwrittenmarks",notwrittenmarks)
     namedata3=namedata2;
     namedata=namedata3;
 
@@ -532,7 +532,7 @@ minusmark++
     res.cookie("mathsmark",mathsmark)
 
 
-    console.log("marks",marks)
+    // console.log("marks",marks)
 
 //    storage.enterWith(phyicsscorepoint)
 
