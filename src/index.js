@@ -68,7 +68,7 @@ var define={ usercoded:false,
   if(req.cookies.usercoded || req.cookies.passcoded) {
    define.usercoded=req.cookies.usercoded
    define.passcoded=req.cookies.passcoded
-   console.log(define)
+//    console.log(define)
   }
   if(!req.cookies.passcoded){
     define.passcoded=false;
@@ -97,12 +97,12 @@ app.post('/' ,   async (req,res)=>{
     const extistinguser=await collection.findOne({name:data.name})
     const extistingpasscode=await collection.findOne({passcode:data.passcode})
     var alluser=await collection.find();
-    console.log(data);
+    // console.log(data);
     namedata=data.name;
 
 
     // const  userdata= await collection.insertMany(data);
-   console.log("mongodb data",alluser);
+//    console.log("mongodb data",alluser);
 
 
 
@@ -139,7 +139,7 @@ app.get('/user/home',   async (req,res)=>{
 
 if(req.cookies.userenter){
     const alluser= await studentmarks.find();
-    console.log(alluser)
+    // console.log(alluser)
     namedata2=namedata
     var subject;
     var subjectlist=["phyics","chemistry","maths"]
@@ -158,7 +158,7 @@ if(req.cookies.userenter){
     else{
 subject=req.cookies.subject
     }
-console.log(subject)
+// console.log(subject)
 var teach={
     "subject":subject
 }
@@ -177,7 +177,7 @@ app.get('/user/phyics' ,  async(req,res)=>{
        
 
             const phyicsexamdata=await phyicsexam.find()
-            console.log(phyicsexamdata);
+            // console.log(phyicsexamdata);
 
            const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
       
@@ -283,7 +283,7 @@ app.post('/user/phyics', async(req,res)=>{
         choice4:req.body.question10_choice4,
         ans:req.body.ans10,
     }   ]
-    console.log(datalist)
+    // console.log(datalist)
   await  phyicsexam.deleteMany()
     await   phyicsexam.insertMany(datalist)
 await resultdatas.deleteMany()
@@ -311,7 +311,7 @@ app.get('/user/chemistry', async(req,res)=>{
        
 
         const chemestrytest= await chemestryexam.find()
-        console.log(chemestrytest);
+        // console.log(chemestrytest);
 
        const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
   
@@ -414,7 +414,7 @@ app.post('/user/chemistry', async (req,res)=>{
         choice4:req.body.question10_choice4,
         ans:req.body.ans10,
     }   ]
-    console.log(datalist)
+    // console.log(datalist)
   await  chemestryexam.deleteMany()
     await   chemestryexam.insertMany(datalist)
 await resultdatas.deleteMany()
@@ -426,7 +426,7 @@ app.get('/user/maths',async(req,res)=>{
     if(req.cookies.userenter){
       
         const maths=await mathsexam.find()
-        console.log(maths);
+        // console.log(maths);
 
        const question=[ "question1","question2", "question3","question4", "question5" ,"question6","question7","question8","question9","question10"]
   
@@ -522,7 +522,7 @@ app.post("/user/maths", async(req,res)=>{
         choice4:req.body.question10_choice4,
         ans:req.body.ans10,
     }   ]
-    console.log(datalist)
+    // console.log(datalist)
   await  mathsexam.deleteMany()
     await   mathsexam.insertMany(datalist)
 await resultdatas.deleteMany()
