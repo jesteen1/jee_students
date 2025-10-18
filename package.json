@@ -3,13 +3,14 @@
     "alert": "^6.0.1",
     "bcrypt": "^5.1.1",
     "connect-ensure-login": "^0.1.1",
-    "cookie-parser": "^1.4.6",
+    "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "js-alert": "^2.0.0",
     "localstorage": "^1.0.1",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
+    "net": "^1.0.2",
     "netlify": "^13.1.20",
     "node-localstorage": "^3.0.5",
     "node-popup": "^0.1.14",
@@ -25,7 +26,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "nodemon":"nodemon index.js"
+    "nodemon": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "jesteen",
   "license": "ISC",
