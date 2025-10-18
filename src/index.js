@@ -225,7 +225,7 @@ app.post('/user/phyics', async(req,res)=>{
   var notwrittenmarks=0;
   var minusmark=0;
 
-     console.log(data)
+    //  console.log(data)
   
     for(let i=0 ; i<=datalist.length;i++){
         const phyicsexamdata=await phyicsexam.findOne({ans:datalist[i]})
@@ -243,9 +243,9 @@ app.post('/user/phyics', async(req,res)=>{
 
                      }
     }
-    console.log(marks)
-    console.log(notwrittenmarks)
-    console.log(minusmark)
+    // console.log(marks)
+    // console.log(notwrittenmarks)
+    // console.log(minusmark)
     namedata3=namedata2;
     namedata=namedata3;
 

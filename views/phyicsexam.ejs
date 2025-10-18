@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,64 +8,80 @@
     <link rel="stylesheet" href="/tailwind.css">
     <link rel="icon" href="/schoollogo.png">
 </head>
+
 <body class="bg-gray-100  ">
     <% if (score.istrue==false) { %>
         <div class="bg-white p-8 rounded shadow-md w-full ">
             <h1 class="text-2xl font-bold mb-6">Physics exam</h1>
             <form method="post" action='/user/phyics'>
-                <% ques.forEach((row,index) => { %>
+                <% ques.forEach((row,index)=> { %>
                     <div class="mb-4">
-                        <p class="text-lg font-semibold text-lg"><%= index+1  %>. <%= row.question  %></p>
+                        <p class="text-lg font-semibold text-lg">
+                            <%= index+1 %>. <%= row.question %>
+                        </p>
                         <div class="mt-2">
                             <label class="block text-lg">
-                                <input  type="radio" name="question<%= index+1 %>" value="<%=index+1%>A" class="mr-2 focus::border-purple-500 text-2xl ">
-                                A. <%= row.choice1  %>
+                                <input type="radio" name="question<%= index+1 %>" value="<%=index+1%>A"
+                                    class="mr-2 focus::border-purple-500 text-2xl ">
+                                A. <%= row.choice1 %>
                             </label>
                             <label class="block text-lg">
-                                <input  type="radio" name="question<%= index+1 %>" value="<%=index+1%>B" class="mr-2">
+                                <input type="radio" name="question<%= index+1 %>" value="<%=index+1%>B" class="mr-2">
                                 B. <%= row.choice2 %>
                             </label>
                             <label class="block text-lg">
-                                <input  type="radio" name="question<%= index+1 %>" value="<%=index+1%>C" class="mr-2">
-                                C. <%= row.choice3  %>
+                                <input type="radio" name="question<%= index+1 %>" value="<%=index+1%>C" class="mr-2">
+                                C. <%= row.choice3 %>
                             </label>
                             <label class="block text-lg">
-                                <input  type="radio" name="question<%= index+1 %>" value="<%=index+1%>D" class="mr-2">
-                                D. <%= row.choice4  %>
+                                <input type="radio" name="question<%= index+1 %>" value="<%=index+1%>D" class="mr-2">
+                                D. <%= row.choice4 %>
                             </label>
                         </div>
                     </div>
-                <% }) %>
-                
-           
-                <!-- Additional questions can be added here -->
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                    <% }) %>
+
+
+                        <!-- Additional questions can be added here -->
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
             </form>
         </div>
-    <% } %>
-  
-    <% if (score.istrue==true) { %>
-        <div class="bg-red-500 flex p-5 text-2xl text-white  text-center "><p>score:</p><p class="animate-bounce"><%= score.score  %></p>
-       </div> 
-       <p class="text-2xl p-5 bg-red-500 text-white capitalize"><a class="bg-green-500 px-3 py-2 hover:underline text-purple-500" href="/user/home">redirect to home</a> </p>
-    <% } %>
-    
+        <% } %>
+
+            <% if (score.istrue==true) { %>
+                <div class="">
+
+                    <div
+                        class="bg-red-500 flex p-5 text-2xl w-full text-white  text-center  justify-center align-items ">
+                        <div class="w-32 flex text-3xl">
+                            <p>score:</p>
+                            <p class="animate-bounce ">
+                                <%= score.score %>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-2xl p-5 bg-red-500 text-white capitalize"><a
+                            class="bg-green-500 px-3 py-2 hover:underline text-purple-500" href="/user/home">redirect to
+                            home</a> </p>
+                </div>
+                <% } %>
+
 </body>
 <style>
-    input[type=radio]{
- 
+    input[type=radio] {
 
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-padding: 10px;
-  border: 2px solid #999;
-  transition: 0.2s all linear;
-  margin-right: 5px;
-color: purple;
-  position: relative;
-  top: 4px;
+
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        padding: 10px;
+        border: 2px solid #999;
+        transition: 0.2s all linear;
+        margin-right: 5px;
+        color: purple;
+        position: relative;
+        top: 4px;
     }
-
 </style>
+
 </html>
