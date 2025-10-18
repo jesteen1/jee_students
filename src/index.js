@@ -28,11 +28,10 @@ app.use(cokkieparser())
 app.use(express.json())
 app.use(express.urlencoded({extended:false}));
 app.set('view engine','ejs');
-app.set("view cache",true);
 app.use('/user',express.static("public"));
-
+app.set("view cache",true);
 app.use(express.static("public"));
-
+app.use(express.urlencoded({ extended: true }));
   //  app.use('/user',ensureLogin.ensureLoggedIn({redirectTo:'/'}))
 
 
@@ -225,13 +224,14 @@ app.post('/user/phyics', async(req,res)=>{
   var marks=0
   var notwrittenmarks=0;
   var minusmark=0;
-    // console.log(data.question1)
-    // console.log(data.question2)
-    // console.log(data.question3)
-    for(let i=0 ; i<datalist.length;i++){
+
+     console.log(data)
+  
+    for(let i=0 ; i<=datalist.length;i++){
         const phyicsexamdata=await phyicsexam.findOne({ans:datalist[i]})
         if(phyicsexamdata){
             marks++;
+            
         }
         else{
             minusmark++
@@ -240,8 +240,12 @@ app.post('/user/phyics', async(req,res)=>{
                     if(!datalist[i]){
 
                         notwrittenmarks++
+
                      }
     }
+    console.log(marks)
+    console.log(notwrittenmarks)
+    console.log(minusmark)
     namedata3=namedata2;
     namedata=namedata3;
 
@@ -543,7 +547,6 @@ const port=3000
 app.listen(port,()=>{
     console.log("server is running 3000")
 })
-
 
 
 
