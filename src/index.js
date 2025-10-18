@@ -30,7 +30,7 @@ app.use(express.urlencoded({extended:false}));
 app.set('view engine','ejs');
 app.use('/user',express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/user", express.static(path.join(__dirname, "public")));
+app.use("/user/home", express.static(path.join(__dirname, "public")));
 
 app.set("view cache",true);
 app.use(express.static("public"));
@@ -550,6 +550,7 @@ const port=3000
 app.listen(port,()=>{
     console.log("server is running 3000")
 })
+
 
 
 
