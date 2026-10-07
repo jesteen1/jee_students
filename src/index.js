@@ -33,7 +33,7 @@ app.use('/user/home',express.static("public"));
 
 
 app.set("view cache",true);
-app.use(express.static("public"));
+//app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
   //  app.use('/user',ensureLogin.ensureLoggedIn({redirectTo:'/'}))
 
